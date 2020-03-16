@@ -19,7 +19,18 @@
 
         <div class="weather-box">
           <div class="temp">{{Math.round(weather.main.temp)}}°c</div>
-          <div class="weather">{{ weather.weather[0].main}}</div>
+          <div class="weather">
+            {{ weather.weather[0].main}}
+            <img
+              :src="'http://openweathermap.org/img/wn/' + weather.weather[0].icon + '.png'"
+            />
+          </div>
+        </div>
+
+        <div class="weather-table">
+          <div class="feels">Feels like: {{ Math.round(weather.main.feels_like)}}°c</div>
+          <div class="pressure">Pressure: {{ pressureConvert() }} mm Hg</div>
+          <div class="humidity">Humidity: {{ weather.main.humidity}}%</div>
         </div>
       </div>
     </div>
@@ -47,6 +58,7 @@ export default {
             return data.json();
           })
           .then(this.setResults);
+        this.query = "";
       }
     },
     setResults(results) {
@@ -82,7 +94,11 @@ export default {
       let month = months[d.getMonth()];
       let year = d.getFullYear();
       return `${day} ${date} ${month} ${year}`;
-    }
+    },
+    pressureConvert() {
+      return Math.floor((this.weather.main.pressure / 133.3224) * 100);
+    },
+    getIcon() {}
   }
 };
 </script>
@@ -185,5 +201,25 @@ body {
   font-weight: 700;
   font-style: italic;
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-box .weather img {
+  margin-left: 20px;
+}
+
+.weather-table {
+  padding: 10px 25px;
+  color: #fff;
+  text-align: center;
+  font-size: 2rem;
+  margin: 30px;
+}
+
+.icon {
+  height: 32px;
+  width: 32px;
 }
 </style>
